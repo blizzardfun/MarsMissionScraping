@@ -13,12 +13,6 @@ mongo = PyMongo(app, uri="mongodb://localhost:27017/mars_db")
 @app.route("/")
 def home():
     entry_list = mongo.db.mars_data.find_one()      #connect/create database
-                #   values returned  mars_dict={"nasa_title":news_title,
-                # "nasa_news":news_p,
-                # "jpl_featured_url":featured_image_url,
-                # "weather":mars_weather,
-                # "mars_factss":html_table,
-                # "hemisphere_urls":hemisphere_image_urls}
 
     return render_template("index.html",entry_list=entry_list)
 
@@ -26,12 +20,27 @@ def home():
 # Route that will trigger scrape functions
 @app.route("/scrape")
 def go_scrape():
-    # scrape the data
+    # scrape the data 
+    # if more than 3 errors occur the previous data will be retained and redisplayed
     mars_dict=scrape()
-    mongo.db.mars_data.drop()
-    collection=mongo.db.mars_data
-    # Insert into database
-    collection.insert_one( {"entry":mars_dict})
+                #   values returned  mars_dict={
+                # "nasa_title":news_title,
+                # "nasa_news":news_p,
+                # "jpl_featured_url":featured_image_url,
+                # "weather":mars_weather,
+                # "mars_facts":html_table,
+                # "hemisphere_urls":hemisphere_image_urls,
+                # "error_count":error_count}
+
+    if mars_dict["error_count"] < 4: 
+        #use new data if less than 3 errors else retain previous data
+        # disguard old data in db
+        mongo.db.mars_data.drop()
+        collection=mongo.db.mars_data
+        # Insert into database
+        collection.insert_one( {"entry":mars_dict})
+    else:
+        print("ERROR LIMIT REACHED previous data retained")
     # Redirect back to home page
     return redirect("/", code=302)
 

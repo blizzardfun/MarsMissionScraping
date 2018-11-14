@@ -8,22 +8,41 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="styles.css">
-
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    <style>
+    body {
+    background: white;
+    margin:5%;
+    font-family: Helvetica, Arial, sans-serif;
+    }
+    .text-match-background { 
+    color:white;
+    }
+    .box-border {
+    border-style: solid;
+    border-color: #c9c9c9;
+    border-width: 2px;
+    padding: 5%
+    }   
+    .middle { 
+    text-align: center;
+    }
+    
+    </style>
+    
 </head>
 
 <body>
 
     <div class="container">
         <div class="jumbotron">
-            <h1 style=text-align:center>Mission to Mars</h1>
+            <h1 class = "middle">Mission to Mars</h1>
             <!-- button to trigger the scrape -->
-            <p style=text-align:center><a class="btn btn-primary btn-lg" 
+            <p class = "middle"><a class="btn btn-primary btn-lg" 
                 href="/scrape" 
                 role="button">Scrape New Data</a></p>
         </div>
     </div>
-
 
     {% if entry_list %}
 
@@ -32,22 +51,81 @@
             <h4> {{entry_list["entry"]["nasa_title"]}} </h4>
             <p> {{entry_list["entry"]["nasa_news"]}} </p>
             <div class="row">
-                <div class="col-sm-12 col-md-8 col-lg-8">
-                    <h3> Featured Mars Image</h3>
-                    <img src = "{{entry_list['entry']['jpl_featured_url']}}" 
-                    alt="JPL's featured image" 
-                    style="width:700px;">
+                <div class="col-sm-12 col-md-8  col-lg-8">
+                    <div class="thumbnail">
+                        <h3> Featured Mars Image</h3>
+                        <img src = "{{entry_list['entry']['jpl_featured_url']}}" 
+                        alt="JPL's featured image" 
+                        style="width:700px;">
+                    </div>
                 </div>
     
-                <div class="col-sm-12 col-md-4 col-lg-4">
-                    <div class = "box-border" > 
-                        <h3 > Current Weather on Mars &</h3>
+                <div class="col-sm-12 col-md-3 col-lg-3">
+                    <div class = "box-border " >   
+                        <h3 > Current Weather on Mars</h3>
                         <p> {{entry_list["entry"]["weather"]}} </p>
                     </div>
                     <h3> Mars Facts</h3>
-                    {{entry_list["entry"]["mars_factss"] |safe }}
+                    {{entry_list["entry"]["mars_facts"] |safe }}
                 </div>
-            </div>   
+            </div> 
+            {% if entry_list["entry"]["hemisphere_urls"] %}
+    
+                <div class="row">
+                    <div class="col-sm-12 col-md-12  col-lg-12">
+                        <h2 class = 'middle'>Mars Hemispheres</h2> 
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6  col-lg-6 box-border">    
+                        <div class="thumbnail">
+                            <img src="{{entry_list['entry']['hemisphere_urls'][0]['img_url']}}" 
+                             alt="hemisphere image 1" 
+                            style="width:500px;">
+                            <h4>{{entry_list['entry']['hemisphere_urls'][0]['title']}}</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6  col-lg-6 box-border">
+                        <div class="thumbnail">
+                            <img src="{{entry_list['entry']['hemisphere_urls'][1]['img_url']}}" 
+                             alt="hemisphere image 2" 
+                            style="width:500px;">
+                            <h4>{{entry_list['entry']['hemisphere_urls'][1]['title']}}</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                        <div class="col-sm-12 col-md-6  col-lg-6 box-border">
+                            <div class="thumbnail">
+                                <img src="{{entry_list['entry']['hemisphere_urls'][2]['img_url']}}" 
+                                 alt="hemisphere image 3" 
+                                style="width:500px;">
+                                <h4>{{entry_list['entry']['hemisphere_urls'][2]['title']}}</h4>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-6  col-lg-6 box-border">
+                            <div class="thumbnail">
+                                <img src="{{entry_list['entry']['hemisphere_urls'][3]['img_url']}}" 
+                                 alt="hemisphere image 4" 
+                                style="width:500px;">
+                                <h4>{{entry_list['entry']['hemisphere_urls'][3]['title']}}</h4>
+                            </div>
+                        </div>
+                    </div>
+    
+            {% else %}
+            <div class="row">
+                    <div class="col-sm-12 col-md-12  col-lg-12">
+                        <h3 class = 'middle'>Mars Hemispheres not available</h3>
+                        <h3 class="text-match-background"> blank line </h3>
+                        <h3 class="text-match-background"> blank line </h3>
+                        <h3 class="text-match-background"> blank line </h3>
+                        <h3 class="text-match-background"> blank line </h3>
+                        <hr>
+                    </div>
+            </div>
+            {% endif %}  
         </div>
 
     {% else %}
