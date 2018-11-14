@@ -13,28 +13,25 @@ mongo = PyMongo(app, uri="mongodb://localhost:27017/mars_db")
 @app.route("/")
 def home():
     entry_list = mongo.db.mars_data.find_one()      #connect/create database
-                #  values returned  mars_dict={"NASA title":news_title,
-                #             "NASA news":news_p,
-                #             "JPL featured url":featured_image_url,
-                #             "Weather":mars_weather,
-                #             "Mars facts":html_table,
-                #             "Hemisphere urls":hemisphere_image_urls}
-    print("after Mongodb")
-    print(entry_list)
+                #   values returned  mars_dict={"nasa_title":news_title,
+                # "nasa_news":news_p,
+                # "jpl_featured_url":featured_image_url,
+                # "weather":mars_weather,
+                # "mars_factss":html_table,
+                # "hemisphere_urls":hemisphere_image_urls}
 
-    return render_template("index.html")
+    return render_template("index.html",entry_list=entry_list)
 
 
 # Route that will trigger scrape functions
 @app.route("/scrape")
 def go_scrape():
+    # scrape the data
+    mars_dict=scrape()
     mongo.db.mars_data.drop()
     collection=mongo.db.mars_data
-    mars_dict=scrape()
-    
     # Insert into database
     collection.insert_one( {"entry":mars_dict})
-
     # Redirect back to home page
     return redirect("/", code=302)
 

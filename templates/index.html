@@ -8,38 +8,51 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+
 </head>
 
 <body>
 
     <div class="container">
         <div class="jumbotron">
-            <h1>Mission to Mars</h1>
+            <h1 style=text-align:center>Mission to Mars</h1>
             <!-- button to trigger the scrape -->
             <p style=text-align:center><a class="btn btn-primary btn-lg" 
                 href="/scrape" 
                 role="button">Scrape New Data</a></p>
         </div>
+    </div>
 
+
+    {% if entry_list %}
+
+        <div class="container-fluid">
+            <h3>Latest Mars News</h3>
+            <h4> {{entry_list["entry"]["nasa_title"]}} </h4>
+            <p> {{entry_list["entry"]["nasa_news"]}} </p>
+            <div class="row">
+                <div class="col-sm-12 col-md-8 col-lg-8">
+                    <h3> Featured Mars Image</h3>
+                    <img src = "{{entry_list['entry']['jpl_featured_url']}}" 
+                    alt="JPL's featured image" 
+                    style="width:700px;">
+                </div>
     
-    </div>
-    <div class="container-fluid">
-        <h1>Latest Mars News</h1>
-        <p>  </p>
-        <p>  </p>
-        <div class="row">
-            <div class="col-sm-12 col-md-6 col-lg-6" style="background-color:lavender;">
-                <h2> Featured Mars Image</h2>
-            </div>
-
-            <div class="col-sm-12 col-md-6 col-lg-6" style="background-color:lavenderblush;">
-                <h2 class = "box-border"> Current Weather on Mars</h2>
-                <h2> Mars Facts</h2>
-            </div>
+                <div class="col-sm-12 col-md-4 col-lg-4">
+                    <div class = "box-border" > 
+                        <h3 > Current Weather on Mars &</h3>
+                        <p> {{entry_list["entry"]["weather"]}} </p>
+                    </div>
+                    <h3> Mars Facts</h3>
+                    {{entry_list["entry"]["mars_factss"] |safe }}
+                </div>
+            </div>   
         </div>
-     
-    </div>
+
+    {% else %}
+        <h3> Click button to retrieve data </h3>
+    {% endif %}
 </body>
 
 </html>

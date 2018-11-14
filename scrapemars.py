@@ -34,12 +34,10 @@ def scrape():
     url=base_url + images_url
     browser.visit(url)
         # click past first and 2nd page
-    '''
     browser.click_link_by_partial_text('FULL IMAGE')
-    
-    browser.find_link_by_partial_text('more info').first.click()
-    #browser.find_by_name('more info').first.click()   ## <<*****************
-    #browser.click_link_by_partial_text('more info')
+
+    browser.is_element_present_by_text('more info', wait_time=5)
+    browser.click_link_by_partial_text('more info')
 
     html=browser.html
     # Scrape page into soup 
@@ -50,7 +48,7 @@ def scrape():
     # get the full url
     featured_image_url=base_url + rel_image
     #print(featured_image_url)
-    '''
+    
     # ### Mars Weather
     #--------------------------------------------------------------
     # Visit Mars Weather twitter account  scrape the latest Mars weather tweet from the page
@@ -71,7 +69,7 @@ def scrape():
     df=tables[0]
     # save the table as html  
     html_table = df.to_html()
-
+    '''
     # ### Mars Hemispheres
     #----------------------------------------------------------------
     # Visit USGS Astrogeology site  obtain high resolution images for each of Mar's hemispheres.
@@ -140,14 +138,14 @@ def scrape():
     #print(image_title)
     image_dict={"title":image_title, "img_url":image_url}
     hemisphere_image_urls.append(image_dict)
-    #print(hemisphere_image_urls)
     browser.quit()
+    '''
+    mars_dict={"nasa_title":news_title,
+                "nasa_news":news_p,
+                "jpl_featured_url":featured_image_url,
+                "weather":mars_weather,
+                "mars_factss":html_table,
+             #   "hemisphere_urls":hemisphere_image_urls
+                }
 
-    mars_dict={"NASA title":news_title,
-                "NASA news":news_p,
-                #"JPL featured url":featured_image_url,
-                "Weather":mars_weather,
-                "Mars facts":html_table,
-                "Hemisphere urls":hemisphere_image_urls}
-    print(mars_dict["NASA news"])
     return mars_dict
