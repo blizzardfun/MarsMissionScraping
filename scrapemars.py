@@ -2,6 +2,7 @@ from splinter import Browser
 from bs4 import BeautifulSoup as bs
 import requests
 import pandas as pd
+import time
 
 # Initialize browser
 def init_browser():
@@ -33,8 +34,13 @@ def scrape():
     url=base_url + images_url
     browser.visit(url)
         # click past first and 2nd page
+    '''
     browser.click_link_by_partial_text('FULL IMAGE')
-    browser.click_link_by_partial_text('more info')
+    
+    browser.find_link_by_partial_text('more info').first.click()
+    #browser.find_by_name('more info').first.click()   ## <<*****************
+    #browser.click_link_by_partial_text('more info')
+
     html=browser.html
     # Scrape page into soup 
     soup=bs(html,"html.parser")
@@ -44,7 +50,7 @@ def scrape():
     # get the full url
     featured_image_url=base_url + rel_image
     #print(featured_image_url)
-
+    '''
     # ### Mars Weather
     #--------------------------------------------------------------
     # Visit Mars Weather twitter account  scrape the latest Mars weather tweet from the page
@@ -139,8 +145,9 @@ def scrape():
 
     mars_dict={"NASA title":news_title,
                 "NASA news":news_p,
-                "JPL featured url":featured_image_url,
+                #"JPL featured url":featured_image_url,
                 "Weather":mars_weather,
                 "Mars facts":html_table,
                 "Hemisphere urls":hemisphere_image_urls}
+    print(mars_dict["NASA news"])
     return mars_dict
