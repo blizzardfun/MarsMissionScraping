@@ -3,7 +3,17 @@ from bs4 import BeautifulSoup as bs
 import requests
 import pandas as pd
 import time
-
+'''
+Will scrape data from 5 sites and combine the data into a dictionary which it will return
+mars_dict={"nasa_title":news_title,
+                "nasa_news":news_p,
+                "jpl_featured_url":featured_image_url,
+                "weather":mars_weather,
+                "mars_facts":html_table,
+                "hemisphere_urls":hemisphere_image_urls,
+                "error_count":error_count
+                }
+'''
 # Initialize browser
 def init_browser():
     # @NOTE: Replace the path with your actual path to the chromedriver
@@ -40,9 +50,8 @@ def scrape():
     url=base_url + images_url
     try:
         browser.visit(url)
-            # click past first and 2nd page
+        # click past first and 2nd page
         browser.click_link_by_partial_text('FULL IMAGE')
-
         browser.is_element_present_by_text('more info', wait_time=10)
         browser.click_link_by_partial_text('more info')
 
@@ -103,6 +112,7 @@ def scrape():
     # Scrape page into soup
     try:
         browser.visit(url)
+        #image and title saved in a dictionary and appended to hemisphere_image_urls list
         hemisphere_image_urls=[]
 
         # Cerberus Hemisphere
@@ -112,13 +122,13 @@ def scrape():
         #find the image and make the full url
         rel_image=soup.find('img',class_="wide-image")['src']
         image_url=base_url + rel_image
-        print(image_url)
+        #print(image_url)
         image_title=soup.find('h2', class_="title").text
-        print(image_title)
-        #save in dictionary and add to image list
+        #print(image_title)
+        #save in dictionary and add to list
         image_dict={"title":image_title, "img_url":image_url}
         hemisphere_image_urls.append(image_dict)
-        print(hemisphere_image_urls)
+
 
         # Schiaparelli Hemisphere
         browser.back()
@@ -128,9 +138,7 @@ def scrape():
         #find the image and make the full url
         rel_image=soup.find('img',class_="wide-image")['src']
         image_url=base_url + rel_image
-        #print(image_url)
         image_title=soup.find('h2', class_="title").text
-        #print(image_title)
         #save in dictionary and add to image list
         image_dict={"title":image_title, "img_url":image_url}
         hemisphere_image_urls.append(image_dict)
@@ -144,9 +152,7 @@ def scrape():
         #find the image and make the full url
         rel_image=soup.find('img',class_="wide-image")['src']
         image_url=base_url + rel_image
-        #print(image_url)
         image_title=soup.find('h2', class_="title").text
-        #print(image_title)
         #save in dictionary and add to image list
         image_dict={"title":image_title, "img_url":image_url}
         hemisphere_image_urls.append(image_dict)
@@ -159,16 +165,13 @@ def scrape():
         #find the image and make the full url
         rel_image=soup.find('img',class_="wide-image")['src']
         image_url=base_url + rel_image
-        #print(image_url)
         image_title=soup.find('h2', class_="title").text
-        #print(image_title)
         image_dict={"title":image_title, "img_url":image_url}
         hemisphere_image_urls.append(image_dict)
     except:
         print("ERROR could not retrieve hemisphere images")
-        hemisphere_image_urls=[]
+        hemisphere_image_urls=[] 
         error_count+=1
-    print(hemisphere_image_urls)
     browser.quit()
 
     mars_dict={"nasa_title":news_title,

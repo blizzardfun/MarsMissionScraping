@@ -2,6 +2,15 @@
 from flask import Flask, render_template, redirect
 from flask_pymongo import PyMongo
 from scrapemars import scrape
+'''
+root route will query Mongo database and pass the mars data into an HTML template to
+displays all of the information that was scraped from the URLs
+
+scrape route will be called from a button it will call a function called `scrape`
+that will execute all of the scraping code and return one Python dictionary containing
+the data and store the return value in Mongo as a Python dictionary. It will then
+redirect to the root route to redisplay the data
+'''
 
 # create instance of Flask app
 app = Flask(__name__)
@@ -13,7 +22,6 @@ mongo = PyMongo(app, uri="mongodb://localhost:27017/mars_db")
 @app.route("/")
 def home():
     entry_list = mongo.db.mars_data.find_one()      #connect/create database
-
     return render_template("index.html",entry_list=entry_list)
 
 
@@ -23,14 +31,7 @@ def go_scrape():
     # scrape the data 
     # if more than 3 errors occur the previous data will be retained and redisplayed
     mars_dict=scrape()
-                #   values returned  mars_dict={
-                # "nasa_title":news_title,
-                # "nasa_news":news_p,
-                # "jpl_featured_url":featured_image_url,
-                # "weather":mars_weather,
-                # "mars_facts":html_table,
-                # "hemisphere_urls":hemisphere_image_urls,
-                # "error_count":error_count}
+                
 
     if mars_dict["error_count"] < 4: 
         #use new data if less than 3 errors else retain previous data
