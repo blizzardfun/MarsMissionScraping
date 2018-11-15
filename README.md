@@ -16,3 +16,5 @@ It will scrape using Splinter to navigate and BeautifulSoup to gather the follow
 
 The data returned will be stored using Mongodb and displayed using Flask template HTML. 
 
+Errors are handles with a short message being printed in place of any missing items. If errors occur on more than 3 of the 5 sites used the scrape will not save or display the data, but will redisplay the previous data. If 3 or less errors occur then previous data is disguarded when the new data is saved.
+
